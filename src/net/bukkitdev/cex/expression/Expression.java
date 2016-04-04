@@ -38,8 +38,14 @@ abstract public class Expression {
 		EXPRESSIONS.add(expressionString);
 		ExpressionPlayer expressionPlayer = new ExpressionPlayer();
 		EXPRESSIONS.add(expressionPlayer);
-		ExpressionAny any = new ExpressionAny();
-		EXPRESSIONS.add(any);
+		ExpressionDouble expressionDouble = new ExpressionDouble();
+		EXPRESSIONS.add(expressionDouble);
+		ExpressionInteger expressionInteger = new ExpressionInteger();
+		EXPRESSIONS.add(expressionInteger);
+		ExpressionFloat expressionFloat = new ExpressionFloat();
+		EXPRESSIONS.add(expressionFloat);
+		ExpressionRest expressionRest = new ExpressionRest();
+		EXPRESSIONS.add(expressionRest);
 		
 		ExpressionConstant constantChecker = new ExpressionConstant("TEMPORARY_DUE_TO_CHECK");
 		CUSTOM_EXPRESSIONS.add(constantChecker);
@@ -56,7 +62,7 @@ abstract public class Expression {
 	abstract protected String createShallRegex();
 	
 	abstract public boolean isExpressionFor(String commandExpression);
-	abstract public boolean reactsTo(CommandSender sender, String enteredCommand);
+	abstract public boolean reactsTo(CommandSender sender, String[] p, int index, String enteredCommand);
 	
 	public boolean matchesShallRegex(String val){
 		return shallRegex.matcher(val).find();
@@ -65,7 +71,7 @@ abstract public class Expression {
 	public boolean matchesRegex(String val){
 		return regex.matcher(val).find();
 	}
-
-	abstract public Result react(CommandSender sender, String enteredCommand);
+	
+	abstract public Result react(CommandSender sender, String[] p, int index, String enteredCommand);
 	
 }

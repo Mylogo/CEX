@@ -44,7 +44,7 @@ public class ExpressionCommandName extends Expression {
 	}
 	
 	@Override
-	public boolean reactsTo(CommandSender sender, String enteredCommand) {
+	public boolean reactsTo(CommandSender sender, String[] p, int index, String enteredCommand) {
 		System.out.println("checking if " + enteredCommand + " will wrok");
 		System.out.println("My Sender:"+senderType.getName() + " CommandSender:"+sender.getClass().getName());
 		if(senderType.isInstance(sender)){ //Checking if it inhertis
@@ -60,7 +60,7 @@ public class ExpressionCommandName extends Expression {
 		return false;
 	}
 	
-	public Result react(CommandSender sender, String enteredCommand){
+	public Result react(CommandSender sender, String[] p, int index, String enteredCommand){
 		return null;
 	}
 

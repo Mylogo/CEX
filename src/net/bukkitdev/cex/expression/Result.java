@@ -9,6 +9,7 @@ public class Result {
 	private Player playerVal;
 	private double doubleVal;
 	private float floatVal;
+	private long longVal;
 	
 	public Result(int intVal) {
 		super();
@@ -35,6 +36,11 @@ public class Result {
 		this.floatVal = floatVal;
 	}
 	
+	public Result(long longVal){
+		super();
+		this.longVal = longVal;
+	}
+	
 	public int getInt() {
 		return intVal;
 	}
@@ -53,6 +59,10 @@ public class Result {
 
 	public float getFloat() {
 		return floatVal;
+	}
+	
+	public long getLong(){
+		return longVal;
 	}
 	
 }

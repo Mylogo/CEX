@@ -33,6 +33,11 @@ public class Results {
 		return results.get(index).getString(); 
 	}
 	
+	public long getLong(int index){
+		return results.get(index).getLong();
+	}
+	
+	
 	public int size(){
 		return results.size();
 	}

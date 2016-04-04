@@ -21,11 +21,14 @@ public @interface Command {
 	 * 
 	 * For command parameters:
 	 * 
-	 * <String> -> Passes the text of yours back
 	 * <constant=CONSTANT_NAME> -> You may add constants in your command e.g. /test <constant=add> <String>
-	 * <int[+|-]>
+	 * <string> <int>, <float>, <double>, <long>
+	 * 
+	 * <player>
 	 * 
 	 */
+	
 	String format();
+	String permission() default CEXMethod.NO_PERMISSIONS;
 	
 }

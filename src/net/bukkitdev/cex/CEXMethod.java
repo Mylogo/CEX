@@ -4,17 +4,23 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
 import net.bukkitdev.cex.expression.Expression;
 import net.bukkitdev.cex.expression.ExpressionCommandName;
+import net.bukkitdev.cex.expression.ExpressionRest;
 import net.bukkitdev.cex.expression.Result;
 import net.bukkitdev.cex.expression.Results;
-
-import org.bukkit.command.CommandSender;
 
 public class CEXMethod {
 
 	private final CEXer cexer;
 	private final Method method;
+	
+	public static final String NO_PERMISSIONS = "NO_PERMS";
+	public static final String NO_PERM_MESSAGE = ChatColor.GRAY + " You do not have any permissions to execute this command.";
+	private String permission = NO_PERMISSIONS;
 	
 	protected Expression[] expressions;
 	
@@ -53,15 +59,21 @@ public class CEXMethod {
 			index = index + 1;
 		}
 	}
+	
+	protected CEXMethod(CEXer cexer, Method method, String fullCmd, String permission) throws WrongParameterException{
+		this(cexer, method, fullCmd);
+		this.permission = permission;
+	}
 
 	public boolean reactsTo(CommandSender sender, String[] p){
 		System.out.println("Parameter size:"+p.length);
 		System.out.println("Expression size:"+expressions.length);
+		
 		if(p.length == expressions.length){
 			System.out.println("Equal size");
 			for(int i = 0; i < expressions.length; i++){
 				System.out.println("Now at:" + i);
-				if(!expressions[i].reactsTo(sender, p[i])){
+				if(!expressions[i].reactsTo(sender, p, i, p[i])){
 					System.out.println("stopped at:" + i);
 					return false;
 				}
@@ -70,6 +82,23 @@ public class CEXMethod {
 			System.out.println("It reacts!");
 			return true;
 		}
+		
+		if(p.length > expressions.length){
+			if(expressions[expressions.length-1] instanceof ExpressionRest){
+				System.out.println("I am am instance!");
+				for(int i = 0; i < expressions.length-1; i++){
+					
+					if(!expressions[i].reactsTo(sender, p, i, p[i])){
+						System.out.println("stopped at:" + i);
+						return false;
+					}
+					
+				}
+				System.out.println("It reacts!");
+				return true;
+			}
+		}
+		
 		System.out.println("Wont react");
 		return false;
 	}
@@ -77,15 +106,21 @@ public class CEXMethod {
 	public void react(CommandSender sender, String[] p){
 		Results results = result(sender, p);
 		for(int i = 1; i < expressions.length; i++){
-			Result r = expressions[i].react(sender, p[i]);
+			Result r = expressions[i].react(sender, p, i, p[i]);
 			results.addResult(r);
 		}
+		
+		if(!permission.equals(NO_PERMISSIONS))
+			if(!sender.hasPermission(permission)){
+				sender.sendMessage(NO_PERM_MESSAGE);
+				return;
+			}
 		
 		try {
 			method.invoke(cexer.getExecutor(), sender, results);
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
-			System.out.println(" ===FATAL ERROR: Something went wrong while passing parameters to executor objects.");
+			System.out.println(" == FATAL ERROR: Something went wrong while passing parameters to executor objects.");
 			e.printStackTrace();
 		}
 		
@@ -94,19 +129,10 @@ public class CEXMethod {
 	protected Results result(CommandSender sender, String[] p){
 		Results results = new Results();
 		for(int i = 1; i < expressions.length; i++){
-			Result r = expressions[i].react(sender, p[i]);
+			Result r = expressions[i].react(sender, p, i, p[i]);
 			results.addResult(r);
 		}
 		return results;
-	}
-	
-	public static CEXMethod newInstance(CEXer cexer, Method method, String fullCmd) throws WrongParameterException{
-		if(fullCmd.endsWith("<ANY>")){
-			System.out.println("It is an <ANY> method");
-			return new CEXAnyMethod(cexer, method, fullCmd);
-		} else {
-			return new CEXMethod(cexer, method, fullCmd);
-		}
 	}
 	
 }

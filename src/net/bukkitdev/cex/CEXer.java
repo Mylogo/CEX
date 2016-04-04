@@ -19,10 +19,16 @@ public class CEXer {
 				
 				String format = m.getAnnotation(Command.class).format();
 				System.out.println("Now registering method:" + m.getName());
-				CEXMethod meth = CEXMethod.newInstance(this, m, format);
+				String permission = m.getAnnotation(Command.class).permission();
+				CEXMethod meth = null;
+				if(permission.equals(CEXMethod.NO_PERMISSIONS))
+					meth = new CEXMethod(this, m, format);
+				else meth = new CEXMethod(this, m, format, permission);
+				
 				
 				methods.add(meth);
 				System.out.println("Now having:" + methods.size() + " objects in methods array");
+				
 			}
 		} else {
 			System.out.println("No methods were found while registerting " + o.toString());

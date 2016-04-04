@@ -33,14 +33,14 @@ public class ExpressionConstant extends Expression implements CustomExpression {
 	}
 
 	@Override
-	public boolean reactsTo(CommandSender sender, String enteredCommand) {
+	public boolean reactsTo(CommandSender sender, String[] p, int index, String enteredCommand) {
 		
 		return enteredCommand.equalsIgnoreCase(CONSTANT_NAME);
 		
 	}
 
 	@Override
-	public Result react(CommandSender sender, String enteredCommand) {
+	public Result react(CommandSender sender, String[] p, int index, String enteredCommand) {
 		return new Result(enteredCommand);
 	}
 
