@@ -4,6 +4,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bukkitdev.cex.expression.Expression;
+import net.bukkitdev.cex.expression.ExpressionRest;
+
 public class CEXer {
 
 	private Object executor;
@@ -33,6 +36,7 @@ public class CEXer {
 		} else {
 			System.out.println("No methods were found while registerting " + o.toString());
 		}
+		this.methods = sortMethods(this.methods);
 	}
 
 	public Object getExecutor() {
@@ -41,6 +45,26 @@ public class CEXer {
 
 	public List<CEXMethod> getMethods() {
 		return methods;
+	}
+	
+	//putting everything with <rest> at the end
+	private static List<CEXMethod> sortMethods(List<CEXMethod> meths){
+		List<CEXMethod> noRest = new ArrayList<>();
+		List<CEXMethod> withRest = new ArrayList<>();
+		cexloop: for(CEXMethod cexm : meths){
+			Expression[] exprs = cexm.expressions;
+			for(Expression ex : exprs){
+				if(ex instanceof ExpressionRest){
+					withRest.add(cexm);
+					continue cexloop;
+				}
+			}
+			noRest.add(cexm);
+		}
+		List<CEXMethod> finalOrder = new ArrayList<>();
+		finalOrder.addAll(noRest);
+		finalOrder.addAll(withRest);
+		return finalOrder;
 	}
 	
 }

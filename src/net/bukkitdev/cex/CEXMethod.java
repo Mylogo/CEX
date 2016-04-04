@@ -66,8 +66,7 @@ public class CEXMethod {
 	}
 
 	public boolean reactsTo(CommandSender sender, String[] p){
-		System.out.println("Parameter size:"+p.length);
-		System.out.println("Expression size:"+expressions.length);
+		System.out.println("Parameter size:"+p.length + " Expression size:"+expressions.length);
 		
 		if(p.length == expressions.length){
 			System.out.println("Equal size");
@@ -79,7 +78,7 @@ public class CEXMethod {
 				}
 			}
 			//It would have always reacted, so it reacts!
-			System.out.println("It reacts!");
+			System.out.println(" == It reacts!");
 			return true;
 		}
 		
@@ -94,12 +93,12 @@ public class CEXMethod {
 					}
 					
 				}
-				System.out.println("It reacts!");
+				System.out.println(" == It reacts cause of <rest>!");
 				return true;
 			}
 		}
 		
-		System.out.println("Wont react");
+		System.out.println(" == Wont react");
 		return false;
 	}
 	
