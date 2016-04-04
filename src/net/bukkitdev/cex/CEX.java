@@ -29,21 +29,4 @@ public class CEX extends JavaPlugin {
 		}
 	}
 	
-	@Command(format="/sucks <player>")
-	public void test(CommandSender sender, Results res){
-		res.getPlayer(0).sendMessage("you suck!");
-	}
-	
-	@Command(format="/sucks <string>")
-	public void fallback(CommandSender sender, Results res){
-		sender.sendMessage("The right syntax is: /sucks <player>");
-	}
-	
-	@Command(format="/sucks <ANY>")
-	public void anyMethod(CommandSender sender, Results res){
-		for(Result r : res.results()){
-			sender.sendMessage(r.getString());
-		}
-	}
-	
 }
